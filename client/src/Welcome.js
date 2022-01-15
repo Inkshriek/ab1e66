@@ -54,9 +54,9 @@ const Welcome = (props) => {
 
     return (
         <Box className={classes.bg}>
-            <div className={classes.fade}/>
+            <Box className={classes.fade}/>
             <Box className={classes.container}>
-                <img src="/img/bubble.png" alt="" className={classes.img}/>
+                <img src="/img/bubble.svg" alt="" className={classes.img}/>
                 <Typography variant="h1" className={classes.text}>Converse with anyone with any language</Typography>
             </Box>
         </Box>
