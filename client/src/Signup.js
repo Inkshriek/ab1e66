@@ -47,8 +47,8 @@ const Login = (props) => {
       <Welcome/>
       <Box className={classes.main}>
         <Grid container item className={classes.topToggle}>
-          <Typography className={classes.helperText}>Need to log in?</Typography>
-          <Button onClick={() => history.push("/login")} className={classes.createAccount} variant="contained">Login</Button>
+          <Typography className={classes.helperText}>Already have an account?</Typography>
+          <Button onClick={() => history.push("/login")} className={classes.createAccount} variant="contained" color="secondary">Login</Button>
         </Grid>
         <form onSubmit={handleRegister}>
           <Grid className={classes.container}>
