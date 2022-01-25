@@ -20,7 +20,8 @@ const useStyles = makeStyles(() => ({
   },
   bubble: {
     backgroundImage: "linear-gradient(225deg, #6CC1FF 0%, #3A8DFF 100%)",
-    borderRadius: "0 10px 10px 10px"
+    borderRadius: "0 10px 10px 10px",
+    overflow: "hidden"
   },
   text: {
     fontSize: 14,
@@ -28,12 +29,34 @@ const useStyles = makeStyles(() => ({
     color: "#FFFFFF",
     letterSpacing: -0.2,
     padding: 8
+  },
+  imagelist: {
+    display: "flex",
+    flexFlow: "row wrap"
+  },
+  image: {
+    height: 200,
+    width: "auto",
+    flexGrow: 1,
+    objectFit: "cover",
+  },
+  hidden: {
+    display: "none"
   }
 }));
 
 const OtherUserBubble = (props) => {
   const classes = useStyles();
-  const { text, time, otherUser } = props;
+  const { text, time, attachments, otherUser } = props;
+  
+  let imagelist = null;
+  if (attachments !== null) {
+    imagelist = attachments.map( (img, index) => {
+      return <img src={img} alt="" key={index} className={classes.image}/>;
+    });
+  }
+
+
   return (
     <Box className={classes.root}>
       <Avatar alt={otherUser.username} src={otherUser.photoUrl} className={classes.avatar}></Avatar>
@@ -42,7 +65,10 @@ const OtherUserBubble = (props) => {
           {otherUser.username} {time}
         </Typography>
         <Box className={classes.bubble}>
-          <Typography className={classes.text}>{text}</Typography>
+          <Box className={classes.imagelist}>
+            {imagelist}
+          </Box>
+          <Typography className={text !== "" && text !== null ? classes.text : classes.hidden}>{text}</Typography>
         </Box>
       </Box>
     </Box>
