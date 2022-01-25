@@ -23,7 +23,7 @@ const Image = (props) => {
     const classes = useStyles();
 
     const handleDelete = (event) => {
-        if (props.onDelete !== undefined && props.onDelete !== null) {
+        if (props.onDelete) {
             props.onDelete(props.index);
         }
     }
