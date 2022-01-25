@@ -140,6 +140,7 @@ const Input = (props) => {
             <InputAdornment position="end">
               <LoadingButton
                 onClick={handleSubmit}
+                color="primary"
                 endIcon={<SendIcon />}
                 loading={disabled}
                 disabled={(images.length === 0 && text === "") ? true : false}
