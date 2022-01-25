@@ -143,7 +143,7 @@ const Input = (props) => {
                 color="primary"
                 endIcon={<SendIcon />}
                 loading={disabled}
-                disabled={(images.length === 0 && text === "") ? true : false}
+                disabled={(images.length === 0 && text === "")}
                 loadingPosition="end"
                 variant="contained"> 
                 Send
