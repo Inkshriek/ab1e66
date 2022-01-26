@@ -7,6 +7,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { postMessage } from "../../store/utils/thunkCreators";
 import Image from "./Image";
+import axios from "axios";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -45,6 +46,7 @@ const Input = (props) => {
   const [text, setText] = useState("");
   const [images, setImages] = useState([]);
   const [disabled, setDisabled] = useState(false);
+  const [file, setFile] = useState("");
   const { postMessage, otherUser, conversationId, user } = props;
 
   const handleChange = (event) => {
@@ -53,28 +55,34 @@ const Input = (props) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    if (text === "" && images.length === 0) {
-      return;
-    }
+    if (text === "" && images.length === 0) return;
     setDisabled(true);
-    // first get any images that were added uploaded onto the cloud
+    
     const uploads = [];
+    const data = [];
+    const reqs = [];
     if (images.length !== 0) {
       for (let i = 0; i < images.length; i++) {
-        const data = new FormData();
-        data.append("file", images[i]);
-        data.append("upload_preset", "yvzoqkzc");
-        data.append("cloud_name","drzbxeoao");
-        await fetch("https://api.cloudinary.com/v1_1/drzbxeoao/image/upload", {
-          method: "post",
-          body: data
-        })
-        .then(resp => resp.json())
-        .then(data => {
-          uploads.push(data.url);
-        })
-        .catch(err => console.log(err));
+        data.push(new FormData());
+        data[i].append("file", images[i]);
+        data[i].append("upload_preset", process.env.REACT_APP_UPLOAD_PRESET);
+        data[i].append("cloud_name", process.env.REACT_APP_CLOUD_NAME);
       }
+
+      try {
+        const instance = axios.create();
+        instance.interceptors.request.eject(0);
+        
+        data.forEach( post => {
+          reqs.push(instance.post("https://api.cloudinary.com/v1_1/" + process.env.REACT_APP_CLOUD_NAME + "/image/upload", post));
+        });
+          
+        const ress = await Promise.all(reqs);
+        [...ress].forEach( res => {
+          uploads.push(res.data.url);
+        })
+      } 
+      catch (error) { console.error(error); }
     }
 
     // add sender user info if posting to a brand new convo, so that the other user will have access to username, profile pic, etc.
@@ -93,22 +101,20 @@ const Input = (props) => {
   };
 
   const handleImage = async (event) => {
-    const img = event.target.files[0]; 
-    if (img == null) return;
-    const reader = new FileReader();
-    reader.readAsDataURL(img);
-    reader.onload = readerEvent => {
-      setImages(images => [...images, readerEvent.target.result]);
-    }
-    document.getElementById('file-input').value = null;
+    setFile("");
+    const pics = [...event.target.files]; 
+    if (pics == null) return;
+    pics.forEach( (img) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(img);
+      reader.onload = readerEvent => {
+        setImages(images => [...images, readerEvent.target.result]);
+      }
+    });
   }
 
   const handleImageDelete = (index) => {
-    setImages(images => {
-      const update = [...images];
-      update.splice(index, 1);
-      return update;
-    });
+    setImages(images.filter((image, i) => i !== index));
   }
 
   const imagelist = images.map( (img, index) => {
@@ -133,7 +139,7 @@ const Input = (props) => {
               <IconButton disabled={disabled} color="secondary" aria-label="upload image" size="medium" onClick={() => document.getElementById('file-input').click()}>
                 <AddPhotoAlternateIcon color="primary" disabled={disabled}/>
               </IconButton>
-              <input id="file-input" type="file" accept="image/*" style={{display: "none"}} onChange={handleImage}/>
+              <input id="file-input" type="file" accept="image/*" value={file} style={{display: "none"}} multiple onChange={handleImage}/>
             </InputAdornment>
           }
           endAdornment={

@@ -51,8 +51,8 @@ const OtherUserBubble = (props) => {
   
   let imagelist = null;
   if (attachments !== null) {
-    imagelist = attachments.map( (img, index) => {
-      return <img src={img} alt="" key={index} className={classes.image}/>;
+    imagelist = attachments.map( img => {
+      return <img src={img} alt="" key={img} className={classes.image}/>;
     });
   }
 
@@ -65,10 +65,10 @@ const OtherUserBubble = (props) => {
           {otherUser.username} {time}
         </Typography>
         <Box className={classes.bubble}>
+          <Typography className={text !== "" && text !== null ? classes.text : classes.hidden}>{text}</Typography>
           <Box className={classes.imagelist}>
             {imagelist}
           </Box>
-          <Typography className={text !== "" && text !== null ? classes.text : classes.hidden}>{text}</Typography>
         </Box>
       </Box>
     </Box>

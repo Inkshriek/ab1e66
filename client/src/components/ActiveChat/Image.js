@@ -21,18 +21,19 @@ const useStyles = makeStyles(() => ({
 
 const Image = (props) => {
     const classes = useStyles();
+    const { src, disabled, index, onDelete } = props;
 
     const handleDelete = (event) => {
-        if (props.onDelete) {
-            props.onDelete(props.index);
+        if (onDelete) {
+            onDelete(index);
         }
     }
 
     return (
         <Box className={classes.root}>
-            <img src={props.src} alt="" className={classes.image}/>
-            <Fab disabled={props.disabled} color="secondary" aria-label="delete image" size="small" onClick={handleDelete} className={classes.button}>
-                <DeleteIcon color="primary" disabled={props.disabled}/>
+            <img src={src} alt="" className={classes.image}/>
+            <Fab disabled={disabled} color="secondary" aria-label="delete image" size="small" onClick={handleDelete} className={classes.button}>
+                <DeleteIcon color="primary" disabled={disabled}/>
             </Fab>
         </Box>
     );
