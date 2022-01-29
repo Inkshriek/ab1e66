@@ -78,7 +78,7 @@ const Input = (props) => {
         });
           
         const ress = await Promise.all(reqs);
-        [...ress].forEach( res => {
+        ress.forEach( res => {
           uploads.push(res.data.url);
         })
       } 
