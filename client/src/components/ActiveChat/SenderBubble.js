@@ -21,20 +21,46 @@ const useStyles = makeStyles(() => ({
     padding: 8,
     fontWeight: "bold"
   },
+  imagelist: {
+    display: "flex",
+    flexFlow: "row wrap"
+  },
+  image: {
+    height: 200,
+    width: "auto",
+    flexGrow: 1,
+    objectFit: "cover",
+  },
   bubble: {
     background: "#F4F6FA",
-    borderRadius: "10px 10px 0 10px"
+    borderRadius: "10px 10px 0 10px",
+    overflow: "hidden"
+  },
+  hidden: {
+    display: "none"
   }
 }));
 
 const SenderBubble = (props) => {
   const classes = useStyles();
-  const { time, text } = props;
+  const { time, attachments, text } = props;
+
+  let imagelist = null;
+  if (attachments !== null) {
+    imagelist = attachments.map( img => {
+      return <img src={img} alt="" key={img} className={classes.image}/>;
+    });
+  }
+
+
   return (
     <Box className={classes.root}>
       <Typography className={classes.date}>{time}</Typography>
       <Box className={classes.bubble}>
-        <Typography className={classes.text}>{text}</Typography>
+        <Typography className={text !== "" && text !== null ? classes.text : classes.hidden}>{text}</Typography>
+        <Box className={classes.imagelist}>
+          {imagelist}
+        </Box>
       </Box>
     </Box>
   );
