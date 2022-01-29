@@ -118,7 +118,7 @@ const Input = (props) => {
   }
 
   const imagelist = images.map( (img, index) => {
-    return <Image src={img} key={index} index={index} onDelete={handleImageDelete} disabled={disabled}/>;
+    return <Image src={img} key={`upload-${index}`} index={index} onDelete={handleImageDelete} disabled={disabled}/>;
   })
 
   return (
